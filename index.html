@@ -412,7 +412,7 @@ function commit(msg){save();var t=totals();var L=levelFrom(t.xp).L;render();if(m
 /* ---------- UI ---------- */
 var tab='quests', lastDK=dayKey();
 var $=function(s){return document.querySelector(s);};
-function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&','<':'<','>':'>','"':'"',"'":'&#39;'}[c];});}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return '\x26#'+c.charCodeAt(0)+';';});}
 function qLabel(q){return q.time?q.name+' '+fmt12(q.time):q.name;}
 function chip(st){return '<span class="chip" style="color:var(--'+st+')">'+st+'</span>';}
 
