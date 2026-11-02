@@ -1,5 +1,5 @@
 // Offline, cache-first service worker. Bump VERSION after changing any file.
-const VERSION = 'level-up-v3';
+const VERSION = 'level-up-v4';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(ASSETS.map(u => new Request(u, { cache: 'reload' })))).then(() => self.skipWaiting()));

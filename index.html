@@ -65,7 +65,7 @@ button,input,select{font:inherit;color:inherit}
 .bar{height:10px;border-radius:6px;background:#1f1a33;border:1px solid rgba(216,1,66,.35);overflow:hidden}
 .bar i{display:block;height:100%;background:linear-gradient(90deg,#8a0030,var(--acc),var(--acc2));box-shadow:0 0 12px var(--acc);border-radius:6px;transition:width .6s cubic-bezier(.2,.9,.3,1)}
 .xpnum{font-family:var(--f-mono);font-size:11px;color:var(--mut);margin-top:4px;display:flex;justify-content:space-between}
-.minis{grid-column:1/-1;display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:2px}
+.minis{grid-column:1/-1;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-top:2px}
 .mini{text-align:center;border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:5px 0 4px;background:rgba(0,0,0,.25)}
 .mini span{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.1em}
 .mini b{font-family:var(--f-mono);font-size:16px;font-weight:400}
@@ -101,9 +101,9 @@ button,input,select{font:inherit;color:inherit}
 .btn.sm{padding:5px 10px;font-size:13px;min-width:36px}
 .btn:disabled{opacity:.4}
 /* stats */
-.srow{display:grid;grid-template-columns:44px 1fr 40px;gap:10px;align-items:center;margin-bottom:10px}
+.srow{display:grid;grid-template-columns:minmax(56px,auto) minmax(0,1fr) 40px;gap:10px;align-items:center;margin-bottom:10px}
 .srow .k{font-family:var(--f-mono);font-size:13px;letter-spacing:.08em}
-.srow .k small{display:block;font-size:9px;color:var(--mut);letter-spacing:0}
+.srow .k small{display:block;white-space:nowrap;font-size:9px;color:var(--mut);letter-spacing:0}
 .srow .v{font-family:var(--f-mono);font-size:17px;text-align:right}
 .srow .bar i{transition:none}
 .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
@@ -263,6 +263,14 @@ body{overflow-x:hidden}
 .xbtn{background:none;border:0;color:var(--mut);font-size:16px;cursor:pointer;padding:0 0 0 6px}
 .mut2{color:var(--dim)}
 a.btn{text-decoration:none;display:inline-grid;place-items:center}
+
+/* overflow fix 1101 */
+.skmini{grid-template-columns:repeat(4,minmax(0,1fr))}
+.skm,.skmini>*,.skhead>*:first-child{min-width:0}
+.skm .n{max-width:100%}
+.skname,.bname,.qsub,.skstat{overflow-wrap:anywhere;min-width:0}
+main,section,.panel{min-width:0;max-width:100%}
+.minis>*{min-width:0;overflow:hidden;text-overflow:ellipsis}
 </style>
 </head>
 <body>
@@ -286,6 +294,13 @@ a.btn{text-decoration:none;display:inline-grid;place-items:center}
 <div id="levelup" class="lvl" role="dialog" aria-live="assertive"></div>
 <div id="toast"></div>
 <input type="file" id="importFile" accept="application/json,.json" hidden>
+<script>
+var EMO_RE=/[\u{1F000}-\u{1FAFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{2B00}-\u{2BFF}\uFE0F\u200D\u20E3]/gu;
+function noEmo(t){return t.replace(EMO_RE,function(c){return c==='\u2713'||c==='\u2714'?c:'';});}
+(function(){function clean(n){if(n.nodeType===3){var v=noEmo(n.nodeValue);if(v!==n.nodeValue)n.nodeValue=v;}else if(n.nodeType===1&&!/^(SCRIPT|STYLE|INPUT|TEXTAREA)$/.test(n.tagName)){for(var c=n.firstChild;c;c=c.nextSibling)clean(c);}}
+new MutationObserver(function(ms){ms.forEach(function(m){if(m.type==='characterData')clean(m.target);else m.addedNodes.forEach(clean);});}).observe(document.documentElement,{childList:true,subtree:true,characterData:true});
+document.addEventListener('DOMContentLoaded',function(){clean(document.body);});})();
+</script>
 <script>window.__SEED={"app":"aw-level-up","exportedAt":"2026-11-02T01:52:13.645Z","v":2,"name":"Phillip","quests":[{"id":"pushups","name":"20 push-ups","xp":20,"stat":"STR"},{"id":"walk","name":"20-min walk","xp":20,"stat":"VIT"},{"id":"water","name":"Drink 2L of water","xp":15,"stat":"VIT"},{"id":"read","name":"15 min reading","xp":20,"stat":"INT"},{"id":"plan","name":"Plan tomorrow","xp":15,"stat":"INT"},{"id":"biz","name":"One business task","xp":25,"stat":"BIZ"},{"id":"kids","name":"Time with the kids","xp":25,"stat":"FAM"}],"bosses":[{"id":"b-workouts","name":"Work out 5 days this week","xp":150,"stat":"STR","target":5},{"id":"b-family","name":"Family day or date night","xp":150,"stat":"FAM","target":1},{"id":"b-biz","name":"Finish one big business project","xp":200,"stat":"BIZ","target":1},{"id":"b-read","name":"Read 100 pages","xp":120,"stat":"INT","target":1}],"days":{"2026-10-31":{"done":{},"total":7,"core":3},"2026-11-01":{"done":{"bp-water":{"xp":10,"stat":"VIT"},"bp-light":{"xp":15,"stat":"VIT"},"pushups":{"xp":20,"stat":"STR"},"read":{"xp":20,"stat":"INT"},"plan":{"xp":15,"stat":"INT"},"biz":{"xp":25,"stat":"BIZ"},"walk":{"xp":20,"stat":"VIT"}},"total":7,"core":3}},"weeks":{"2026-10-26":{"done":{"b-family":{"xp":150,"stat":"FAM"}},"prog":{"b-family":1,"b-workouts":0}}},"maxLevel":3,"bedtime":"22:30","chapter":{"idx":0,"start":"2026-10-31","hold":false,"log":[]}}
 ;</script>
 <script>
@@ -354,7 +369,7 @@ var SKILLS=[
   {id:'business',n:'Business',stat:'BIZ',how:'Only learning: books, courses, entrepreneurship study. Daily work tasks give general XP and streaks, not skill XP.',
     un:{2:'Book boss slot: entrepreneurship',4:'Elite: apply one lesson this week',6:'Weekly boss: finish a course module',8:'Elite: teach a lesson to the team',10:'Title: Founder Mode'}}
 ];
-var SK_ICONS={cooking:'🍳',parenting:'👨‍👧',rel:'❤️',business:'💼'};SKILLS.forEach(function(k){k.icon=SK_ICONS[k.id]||'⭐';});
+SKILLS.forEach(function(k){k.icon='';});
 function skDef(id){return SKILLS.find(function(k){return k.id===id;})||{id:id,n:'(deleted skill)',stat:'INT',icon:'·',how:'',un:{}};}
 function skShort(k){return k.id==='rel'&&k.n==='Relationship with Shermayne'?'Shermayne':k.n;}
 var LV_T=[0,50,120,210,320,450,600,780,990,1230];
@@ -430,7 +445,7 @@ function logsToday(id){var t=dayKey();return S.x.logs.filter(function(l){return 
 /* ---------- views ---------- */
 function skillPips(v){var h='<div class="spips">';for(var i=1;i<=10;i++)h+='<i class="'+(i<=v.cur?'on':(i<=v.peak?'pk':''))+'"></i>';return h+'</div>';}
 function renderSkillMini(inPlayer){var h=(inPlayer?'':'<div class="mini-l" style="margin:8px 0 6px">SKILLS · current / peak</div>')+'<div class="skmini'+(inPlayer?' inp':'')+'">';
-  SKILLS.forEach(function(k){var v=skillView(k.id);h+='<div class="skm" data-tabgo="skills"><span class="n" style="color:var(--'+k.stat+')">'+esc((k.icon?k.icon+' ':'')+skShort(k))+'</span><b>'+v.cur+'</b><small>/'+v.peak+'</small>'+(v.boost?'<em>2×</em>':'')+'</div>';});
+  SKILLS.forEach(function(k){var v=skillView(k.id);h+='<div class="skm" data-tabgo="skills"><span class="n" style="color:var(--'+k.stat+')">'+esc(skShort(k))+'</span><b>'+v.cur+'</b><small>/'+v.peak+'</small>'+(v.boost?'<em>2×</em>':'')+'</div>';});
   return h+'</div>';}
 function statusLine(v){if(v.idle==null)return 'Not practised yet · baseline';
   var s=v.idle===0?'Practised today':'Idle '+v.idle+' day'+(v.idle>1?'s':'');
@@ -440,7 +455,7 @@ function renderSkills(){var h='<section class="panel"><div class="ptitle"><h2>SK
   '<p class="note" style="margin:0 0 10px">Current level fades when you stop practising: slowly at first, then faster. Peak never drops, and below peak you earn <b>2× skill XP</b>. Your player level and total XP never go down.</p>'+
   '<button class="btn solid wide" data-open-log>+ Log activity</button></section>';
   SKILLS.forEach(function(k){var v=skillView(k.id);
-    h+='<section class="panel skill"><div class="skhead"><div><div class="btag" style="color:var(--'+k.stat+')">SKILL · '+k.stat+'</div><div class="skname">'+esc((k.icon?k.icon+' ':'')+k.n)+'</div><button class="btn sm ghost" style="margin-top:6px" data-sk-edit="'+esc(k.id)+'">&#9998; Edit</button></div>'+
+    h+='<section class="panel skill"><div class="skhead"><div><div class="btag" style="color:var(--'+k.stat+')">SKILL · '+k.stat+'</div><div class="skname">'+esc(k.n)+'</div><button class="btn sm ghost" style="margin-top:6px" data-sk-edit="'+esc(k.id)+'">Edit</button></div>'+
     '<div class="sklv"><span>LV</span><b>'+v.cur+'</b><small>PEAK '+v.peak+'</small></div></div>'+skillPips(v)+
     '<div class="bar"><i style="width:'+(v.cur>=10?100:(v.into/v.need*100)).toFixed(1)+'%;background:var(--'+k.stat+');box-shadow:0 0 10px var(--'+k.stat+')"></i></div>'+
     '<div class="xpnum"><span>'+(v.cur>=10?'MAX':v.into+' / '+v.need+' skill XP')+'</span><span>peak '+v.peakXP+' XP</span></div>'+
@@ -464,7 +479,7 @@ function openSheet(filter){var o=document.getElementById('sheet');if(!o){o=docum
   o.dataset.f=filter||'';drawSheet();o.classList.add('show');}
 function drawSheet(){var o=document.getElementById('sheet');if(!o)return;var f=o.dataset.f;
   var SUB={cooking:'Cooking',parenting:'Parenting · quality time only',rel:'Shermayne · quality time only',business:'Business · learning only'},DEFN={cooking:'Cooking',parenting:'Parenting',rel:'Relationship with Shermayne',business:'Business'};
-  var groups=SKILLS.map(function(k){return [k.id,(k.icon?k.icon+' ':'')+(DEFN[k.id]===k.n?SUB[k.id]:k.n)];}).concat([['general','General · XP & streaks, no skill']]);
+  var groups=SKILLS.map(function(k){return [k.id,(DEFN[k.id]===k.n?SUB[k.id]:k.n)];}).concat([['general','General · XP & streaks, no skill']]);
   var h='<div class="scard"><div class="ptitle"><h2>LOG ACTIVITY</h2><button class="btn sm ghost" data-close-sheet>Done</button></div><p class="note" style="margin:0 0 8px">Repeatable. Each activity has a small daily cap.</p>';
   groups.forEach(function(g){if(f&&g[0]!==f)return;h+='<div class="mini-l lg">'+esc(g[1]).toUpperCase()+'</div>';
     ACTS.filter(function(a){return a.g===g[0];}).forEach(function(a){var n=logsToday(a.id),full=n>=a.cap,boost=a.sk&&skillView(a.sk).boost;
@@ -477,7 +492,7 @@ function closeSheet(){var o=document.getElementById('sheet');if(o)o.classList.re
 var F={book:{q:'',res:null,busy:false,err:''},recipe:{q:'',res:null,busy:false,err:''}};
 function renderFresh(){var h='<section class="panel" id="fresh"><div class="ptitle"><h2>FRESH PICKS</h2><span class="meta">this week</span></div>';
   if(!S.x.inbox.length)h+='<p class="hint">Inbox clear. Search below for more.</p>';
-  S.x.inbox.forEach(function(p){var img=p.cover||p.img;h+='<div class="pick">'+(img?'<img src="'+esc(img)+'" alt="" loading="lazy">':'<div class="noimg">&#9733;</div>')+
+  S.x.inbox.forEach(function(p){var img=p.cover||p.img;h+='<div class="pick">'+(img?'<img src="'+esc(img)+'" alt="" loading="lazy">':'<div class="noimg"></div>')+
     '<div class="pbody"><div class="btag">'+esc(p.why)+'</div><div class="qname">'+esc(p.title)+'</div>'+(p.author?'<div class="qsub">'+esc(p.author)+'</div>':'')+
     '<div class="row-btns" style="margin-top:6px"><button class="btn sm solid" data-pick-ok="'+esc(p.id)+'">Accept</button><button class="btn sm ghost" data-pick-skip="'+esc(p.id)+'">Skip</button></div></div></div>';});
   return h+'</section>';}
@@ -505,7 +520,7 @@ function skillOpts(sel){return '<option value="">General (INT)</option>'+SKILLS.
 function renderFind(){var b=F.book,r=F.recipe;
   var h='<section class="panel" id="findBook"><div class="ptitle"><h2>FIND A BOOK</h2><span class="meta">Open Library</span></div><div class="srch"><input class="inp" id="bookQ" placeholder="e.g. entrepreneurship, parenting" value="'+esc(b.q)+'" enterkeyhint="search"><button class="btn solid" id="bookGo">'+(b.busy?'…':'Search')+'</button></div>';
   if(b.err)h+='<p class="hint">'+esc(b.err)+'</p>';
-  if(b.res){if(!b.res.length)h+='<p class="hint">No books found.</p>';b.res.forEach(function(x,i){h+='<div class="pick">'+(x.cover?'<img src="'+esc(x.cover)+'" alt="" loading="lazy">':'<div class="noimg">&#9733;</div>')+'<div class="pbody"><div class="qname">'+esc(x.title)+'</div><div class="qsub">'+esc(x.author)+(x.year?' · '+x.year:'')+(x.pages?' · '+x.pages+' pp':'')+'</div>'+
+  if(b.res){if(!b.res.length)h+='<p class="hint">No books found.</p>';b.res.forEach(function(x,i){h+='<div class="pick">'+(x.cover?'<img src="'+esc(x.cover)+'" alt="" loading="lazy">':'<div class="noimg"></div>')+'<div class="pbody"><div class="qname">'+esc(x.title)+'</div><div class="qsub">'+esc(x.author)+(x.year?' · '+x.year:'')+(x.pages?' · '+x.pages+' pp':'')+'</div>'+
     '<div class="srch" style="margin-top:6px"><select class="inp sm" data-bsk="'+i+'">'+skillOpts(x.sk)+'</select><button class="btn sm solid" data-mkbook="'+i+'">Make boss</button></div></div></div>';});}
   h+='</section><section class="panel" id="findRecipe"><div class="ptitle"><h2>FIND A RECIPE</h2><span class="meta">TheMealDB</span></div><div class="srch"><input class="inp" id="recipeQ" placeholder="e.g. chicken, salmon, curry" value="'+esc(r.q)+'" enterkeyhint="search"><button class="btn solid" id="recipeGo">'+(r.busy?'…':'Search')+'</button></div>';
   if(r.err)h+='<p class="hint">'+esc(r.err)+'</p>';
@@ -556,21 +571,21 @@ document.addEventListener('keydown',function(ev){if(ev.key!=='Enter')return;if(e
 document.addEventListener('input',function(ev){if(ev.target.id==='bookQ')F.book.q=ev.target.value;if(ev.target.id==='recipeQ')F.recipe.q=ev.target.value;});
 /* ---------- skill customization (editor) ---------- */
 var SE_DEF=JSON.parse(JSON.stringify({skills:SKILLS,acts:ACTS,q:SKILL_MAP.q,b:SKILL_MAP.b}));
-var SE_EMO=['⭐','🍳','👨‍👧','❤️','💼','💪','🏃','🧘','📚','🧠','🎸','🎨','💻','🗣️','💰','🌱','🛠️','✍️','🎯','🙏','🏡','🧹','⚽','🚴'];
+var SE_EMO=[];
 function SE_id(p){return p+Date.now().toString(36)+Math.random().toString(36).slice(2,5);}
 function SE_num(v,lo,hi,d){v=Math.round(+v);if(!isFinite(v))v=d;return Math.max(lo,Math.min(hi,v));}
 function SE_cleanCfg(c){var d=JSON.parse(JSON.stringify(SE_DEF));
   if(!c||typeof c!=='object'||!Array.isArray(c.skills))return d; // migration: older saves get the built-in skills
   var ids={},out={skills:[],acts:[],q:{},b:{}};
   c.skills.forEach(function(k){if(!k||!k.id||ids[k.id])return;ids[k.id]=1;var un={};Object.keys(k.un||{}).forEach(function(L){if(+L>=1&&+L<=10&&k.un[L])un[+L]=String(k.un[L]).slice(0,140);});
-    out.skills.push({id:String(k.id),n:String(k.n||'Skill').slice(0,60),icon:String(k.icon||'⭐').slice(0,8),stat:STATS.indexOf(k.stat)>=0?k.stat:'INT',how:String(k.how||'').slice(0,300),un:un});});
+    out.skills.push({id:String(k.id),n:String(k.n||'Skill').slice(0,60),icon:String(k.icon||'').slice(0,8),stat:STATS.indexOf(k.stat)>=0?k.stat:'INT',how:String(k.how||'').slice(0,300),un:un});});
   (Array.isArray(c.acts)?c.acts:d.acts).forEach(function(a){if(!a||!a.id)return;var sk=a.sk&&ids[a.sk]?String(a.sk):null;if(a.sk&&!sk)return;
     out.acts.push({id:String(a.id),g:sk||'general',n:String(a.n||'Activity').slice(0,80),stat:STATS.indexOf(a.stat)>=0?a.stat:'INT',xp:SE_num(a.xp,0,500,10),sk:sk||undefined,sg:sk?SE_num(a.sg,0,500,10):undefined,cap:SE_num(a.cap,1,20,1)});});
   ['q','b'].forEach(function(t){var m=c[t]||{};Object.keys(m).forEach(function(id){var e=m[id];if(e&&ids[e.sk])out[t][id]={sk:e.sk,sg:SE_num(e.sg,0,500,15),why:String(e.why||'counts toward skill')};});});
   return out;}
 var SE=null; // editor draft
 function SE_open(id){var isNew=!id;
-  if(isNew){id=SE_id('s');SE={isNew:true,k:{id:id,n:'New skill',icon:'⭐',stat:'INT',how:'',un:{}},acts:[],q:{},b:{},lv:1,pk:1,lv0:1,pk0:1};}
+  if(isNew){id=SE_id('s');SE={isNew:true,k:{id:id,n:'New skill',icon:'',stat:'INT',how:'',un:{}},acts:[],q:{},b:{},lv:1,pk:1,lv0:1,pk0:1};}
   else{var k=SKILLS.find(function(x){return x.id===id;});if(!k)return;var v=skillView(id),q={},b={};
     Object.keys(SKILL_MAP.q).forEach(function(i){if(SKILL_MAP.q[i].sk===id)q[i]=SKILL_MAP.q[i].sg;});Object.keys(SKILL_MAP.b).forEach(function(i){if(SKILL_MAP.b[i].sk===id)b[i]=SKILL_MAP.b[i].sg;});
     SE={k:JSON.parse(JSON.stringify(k)),acts:JSON.parse(JSON.stringify(ACTS.filter(function(a){return a.sk===id;}))),q:q,b:b,lv:v.cur,pk:v.peak,lv0:v.cur,pk0:v.peak};}
@@ -582,8 +597,6 @@ function SE_owner(t,id){var m=SKILL_MAP[t][id];return m&&m.sk!==SE.k.id?skDef(m.
 function SE_draw(){var o=document.getElementById('skedit');if(!o||!SE)return;var k=SE.k,st=o.querySelector('.scard')?o.querySelector('.scard').scrollTop:0;
   var h='<div class="scard se"><div class="ptitle"><h2>'+(SE.isNew?'ADD SKILL':'EDIT SKILL')+'</h2><button class="btn sm ghost" data-se-cancel>Cancel</button></div>'+
   '<label class="se-l">Name</label><input class="inp" data-se="n" value="'+esc(k.n)+'" maxlength="60">'+
-  '<label class="se-l">Icon</label><div class="se-emo">'+SE_EMO.map(function(e){return '<button class="'+(e===k.icon?'on':'')+'" data-se-emo="'+e+'">'+e+'</button>';}).join('')+'</div>'+
-  '<input class="inp sm" data-se="icon" value="'+esc(k.icon)+'" maxlength="8" placeholder="or type/paste any emoji" style="margin-top:6px">'+
   '<label class="se-l">Parent stat</label>'+SE_stats(k.stat,'data-se="stat"')+
   '<label class="se-l">What counts (description)</label><textarea class="inp" rows="2" data-se="how" maxlength="300">'+esc(k.how)+'</textarea>'+
   '<div class="mini-l lg">ACTIVITIES THAT EARN SKILL XP</div>';
@@ -611,7 +624,7 @@ function SE_input(t){if(!SE)return false;var d=t.dataset,k=SE.k;
   if(d.seQt){if(t.checked)SE[d.seQt][d.id]=d.seQt==='q'?15:30;else delete SE[d.seQt][d.id];SE_draw();return true;}
   return false;}
 function SE_save(){var k=SE.k,id=k.id;k.n=(k.n||'').trim();if(!k.n){toast('Give the skill a name');return;}
-  k.icon=(k.icon||'').trim()||'⭐';var un={};for(var L=1;L<=10;L++)if((k.un[L]||'').trim())un[L]=k.un[L].trim();k.un=un;
+  k.icon=(k.icon||'').trim();var un={};for(var L=1;L<=10;L++)if((k.un[L]||'').trim())un[L]=k.un[L].trim();k.un=un;
   var lvChg=SE.lv!==SE.lv0||SE.pk!==SE.pk0;
   if(lvChg&&!confirm('Set '+k.n+' to level '+SE.lv+' (peak '+SE.pk+')? This overrides earned skill XP.'))return;
   var i=SKILLS.findIndex(function(x){return x.id===id;});if(i>=0)SKILLS[i]=k;else SKILLS.push(k);
@@ -774,7 +787,7 @@ function commit(msg){save();var t=totals();var L=levelFrom(t.xp).L;render();if(m
 /* ---------- UI ---------- */
 var tab='quests', lastDK=dayKey();
 var $=function(s){return document.querySelector(s);};
-function esc(s){return String(s).replace(/[&<>"']/g,function(c){return '\x26#'+c.charCodeAt(0)+';';});}
+function esc(s){return noEmo(String(s)).replace(/[&<>"']/g,function(c){return '\x26#'+c.charCodeAt(0)+';';});}
 function qLabel(q){return q.time?q.name+' '+fmt12(q.time):q.name;}
 function chip(st){return '<span class="chip" style="color:var(--'+st+')">'+st+'</span>';}
 
